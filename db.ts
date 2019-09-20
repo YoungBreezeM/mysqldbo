@@ -26,50 +26,80 @@ pool.on('release', function (connection:any) {
  * @param value 要进行操作的数据
  * @callback 数据回调
  * */
-interface sqlOption {
-    sql:string,
-    callback:any,
-    value?:Array<string|number>
-
-}
-export function dbo(option:sqlOption){
-    if(option.sql){
-        pool.getConnection((c_err,conn)=>{//连接不成功
-            if(c_err)
-                throw c_err;
-            else {//通过连接操作数据库
-                if(option.callback){
-                    conn.query(option.sql,(err,result)=>{
-                        if(err)
-                            throw err;
-                        else{
-                            //释放连接
-                            conn.release();
-                            // setTimeout(()=>{
-                            //     //当用户离开记得断开连接
-                            //     // pool.end()
-                            // },3000)
-                            //返回数据
-                            option.callback(result)
-                        }
-                    })
-                }else if(option.value&&option.callback){
-                    conn.query(option.sql,option.value,(err,result)=>{
-                        if(err)
-                            throw err;
-                        else{
-                            //释放连接
-                            conn.release();
-                            //返回数据
-                            option.callback(result)
-                        }
-                    })
-                }else {
-                    throw new Error('option is error')
-                }
+export function dbo(sql:string):object
+export function dbo(sql:string,value:Array<string|number>,callback:any):object
+export function dbo(sql:string,callback?:any):object
+export function dbo():any {
+    let lenCol = [
+        {//长度为0的处理函数
+            "defult":function(){
+                throw new Error("args is cant empty");
             }
-        })
-    }else {
-        throw new Error("sql cant empty")
+        },
+        {//1
+            "string": ({sql}:any)=>{
+                throw new Error('must has a callback')
+            }
+        },
+        {//2
+            "string-function": ({sql,callback}:any)=>{
+                pool.getConnection((c_err,conn)=>{//连接不成功
+                    if(c_err)
+                        throw c_err;
+                    else {//通过连接操作数据库
+                            conn.query(sql,(err,result)=>{
+                                if(err)
+                                    throw err;
+                                else{
+                                    //释放连接
+                                    conn.release();
+                                    //返回数据
+                                    callback(result)
+                                }
+                            })
+                        }
+                    })
+            }
+        },
+        {//3
+            "string-object-function": ({sql,value,callback}:any)=>{
+                pool.getConnection((c_err,conn)=>{//连接不成功
+                    if(c_err)
+                        throw c_err;
+                    else {//通过连接操作数据库
+                        conn.query(sql,value,(err,result)=>{
+                            if(err)
+                                throw err;
+                            else{
+                                //释放连接
+                                conn.release();
+                                //返回数据
+                                callback(result)
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    ];
+    let typeCol:any ='';//类型拼接缓存
+    let args ={sql:null,value:null,callback:null}//数据项缓存
+    for(let i=0;i<arguments.length;i++){
+        if(i==arguments.length-1)
+            typeCol += typeof arguments[i];
+        else
+            typeCol += typeof arguments[i]+'-'
+
+        if(typeof arguments[i]==='string'){
+            args.sql = arguments[i];
+        }else if (typeof arguments[i]==='object'){
+            args.value = arguments[i];
+        }else {
+            args.callback = arguments[i];
+        }
     }
-}
+    if(arguments.length>0)//根据数据类型和参数个数运行相应的方法
+        lenCol[arguments.length][typeCol](args);
+    else
+        throw new Error("args is cant empty");
+};
