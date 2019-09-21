@@ -1,5 +1,6 @@
-import {dbo} from './db';
+import {Dbo} from './db';
 let sql ='select * from user';
-dbo(sql,(rs)=>{
+Dbo.select(sql,(rs)=>{
     console.log(rs)
-});
+})
+

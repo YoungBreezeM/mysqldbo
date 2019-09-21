@@ -1,0 +1,122 @@
+|-前端
+  |-html
+  |-css
+  |-css3
+  |-html5
+  |-canvas
+    |-svg
+    |-local Db
+  |-UI框架
+    |-bootstrap3
+    |-boorstrap4
+  |-js
+    |-js DOM
+    |-ajax
+    |-jquery
+    |-正则表达
+    |-Json
+    |-es6
+  |-js 应用框架
+    |-vue
+    |-vue cli (未学)
+    |-element-ui (未学)
+    |-微信小程序
+    |-echarts
+  |-后台
+    |-php 没有接触太多
+    |-nodejs
+      |-重要知识
+      |-异步，进程，线程区别
+      |-webscolit (未学)
+      |-爬虫 (未学)
+      |- npm
+      |-nodejs api (未学)
+      |-c++ 拓展插件编写
+      |-nodejs 多线程
+      |-规范
+        |-代码规范
+        |-Rustful接口设计规范
+      |-web框架
+        |-express
+        |-koa (未学)
+        |-egg(未学)
+      |-node 工具
+        |-压力测试工具
+          |-abc
+        |-代码打包工具
+          |-webpack 4.0
+          |-jxc
+      |-node 转译器
+        |-typescript
+        |-bundel
+    |-java
+      |-jsp
+      |-servlet (未学)
+      |-javaBeam (未学)
+      |-java EE (未学)
+      |-spring (未学)
+      |-spring boot (未学)
+|-运维
+  |-网络协议
+    |-http
+    |-http2
+    |-tcp/ip
+    |-smtp
+    |-https
+  |-web 服务器容器
+    |-apache
+    |-tomcat
+    |-nginx
+  |-pm2 进程守护，性能优化，负载均衡
+    |-process 进程绑定调用
+    |-cluster 集群进程程序
+    |-垃圾回收
+    |-进程守护，监听进程运行状态，清理内存
+  |-linux
+    |-centos
+    |-ubantu
+|-架构
+  |-软件工程
+  |-V8引擎
+|-数据库
+  |-mysql
+  |-mongodb
+  |-redis (未学)
+|-安全
+  |-xss 工具
+  |-md5 加密
+  |-sql注入
+|-编程基础
+  |-c
+  |-c++
+  |-数据结构
+  |-数据库设计
+  |-设计模式
+  |-刷题
+|-开发工具
+  |-webstorm
+  |-vscode
+  |-eclipse
+  |-idea
+|-开发项目技术选型
+  |-『鞋柜』微信小程序技术集合
+    |- 微信小程序APi
+    |- nodejs
+    |- express
+    |- mysql
+    |- token
+    |- mongodb
+    |- 第三方接口
+  |- 电业局项目
+    |- echarts
+    |- bootstrap3
+    |- webpack 4.0
+    |-java
+      |-javaweb
+    |-mysql
+|-阅读优质资料
+  |-官方文档（大佬讲解文档）
+  |-《js高级程序设计》
+  |- 张镕铭《设计模式》
+  |-《了不起的nodejs》
+  |-《深入浅出》

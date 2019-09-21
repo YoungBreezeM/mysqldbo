@@ -23,84 +23,57 @@ pool.on('enqueue', function () {
 pool.on('release', function (connection) {
     console.log('Connection %d released', connection.threadId);
 });
-function dbo() {
-    var lenCol = [
-        {
-            "defult": function () {
-                throw new Error("args is cant empty");
-            }
-        },
-        {
-            "string": function (_a) {
-                var sql = _a.sql;
-                throw new Error('must has a callback');
-            }
-        },
-        {
-            "string-function": function (_a) {
-                var sql = _a.sql, callback = _a.callback;
-                pool.getConnection(function (c_err, conn) {
-                    if (c_err)
-                        throw c_err;
-                    else {
-                        conn.query(sql, function (err, result) {
-                            if (err)
-                                throw err;
-                            else {
-                                //释放连接
-                                conn.release();
-                                //返回数据
-                                callback(result);
-                            }
-                        });
-                    }
-                });
-            }
-        },
-        {
-            "string-object-function": function (_a) {
-                var sql = _a.sql, value = _a.value, callback = _a.callback;
-                pool.getConnection(function (c_err, conn) {
-                    if (c_err)
-                        throw c_err;
-                    else {
-                        conn.query(sql, value, function (err, result) {
-                            if (err)
-                                throw err;
-                            else {
-                                //释放连接
-                                conn.release();
-                                //返回数据
-                                callback(result);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    ];
-    var typeCol = ''; //类型拼接缓存
-    var args = { sql: null, value: null, callback: null }; //数据项缓存
-    for (var i = 0; i < arguments.length; i++) {
-        if (i == arguments.length - 1)
-            typeCol += typeof arguments[i];
-        else
-            typeCol += typeof arguments[i] + '-';
-        if (typeof arguments[i] === 'string') {
-            args.sql = arguments[i];
-        }
-        else if (typeof arguments[i] === 'object') {
-            args.value = arguments[i];
-        }
-        else {
-            args.callback = arguments[i];
-        }
+/**
+ *@namespace dbo 重载数据操作原
+ * @param sql 进行sql操作的语句
+ * @param value 要进行操作的数据
+ * @callback 数据回调
+ * */
+var Dbo = /** @class */ (function () {
+    function Dbo() {
     }
-    if (arguments.length > 0)
-        lenCol[arguments.length][typeCol](args);
-    else
-        throw new Error("args is cant empty");
-}
-exports.dbo = dbo;
-;
+    Dbo.select = function (sql, callback) {
+        this.dboopt2(sql, callback);
+    };
+    ;
+    Dbo.dboopt2 = function (sql, callback) {
+        pool.getConnection(function (c_err, conn) {
+            if (c_err)
+                throw c_err;
+            else {
+                conn.query(sql, function (err, result) {
+                    if (err)
+                        throw err;
+                    else {
+                        //释放连接
+                        conn.release();
+                        //返回数据
+                        callback(result);
+                    }
+                });
+            }
+        });
+    };
+    ;
+    Dbo.dboopt3 = function (sql, value, callback) {
+        pool.getConnection(function (c_err, conn) {
+            if (c_err)
+                throw c_err;
+            else {
+                conn.query(sql, value, function (err, result) {
+                    if (err)
+                        throw err;
+                    else {
+                        //释放连接
+                        conn.release();
+                        //返回数据
+                        callback(result);
+                    }
+                });
+            }
+        });
+    };
+    return Dbo;
+}());
+exports.Dbo = Dbo;
 //# sourceMappingURL=db.js.map
